@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,7 +24,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 public class TestMostPopularBase {
 
-    public Configuration config;
+    Configuration config =  new Configuration("/config.properties");
 
     protected final RequestSpecification reqSpecMostPopular =
             new RequestSpecBuilder().setBaseUri(config.getProperty("mostpopular_url"))
@@ -31,10 +32,10 @@ public class TestMostPopularBase {
                     .build().log().all(true);
 
 
-    @BeforeClass
-    public void beforeClass(){
-        config = new Configuration("/config.properties");
-    }
+//    @BeforeClass
+//    public void beforeClass(){
+//        config = new Configuration("/config.properties");
+//    }
     @Test
     public void getAlltest(){
         System.out.println(getAllSections());
@@ -47,9 +48,11 @@ public class TestMostPopularBase {
                 .statusCode(200)
                 .body("status", response -> equalTo("OK"))
                 .body("num_results", response -> notNullValue());
-        Set sections = new TreeSet();
-        for (int i = 0; i <= (Integer) section_response.extract().path("num_results"); i++){
-            sections.add(section_response.extract().path("results.name[" + i + "]"));
+
+//        System.out.println("HERE RESPONSE ===========>>>>>>>>" + section_response.extract().response().path("results[0].name"));
+        Set<String> sections = new LinkedHashSet();
+        for (int i = 0; i < (Integer) section_response.extract().response().path("num_results"); i++){
+            sections.add(section_response.extract().response().path("results[" + i + "].name"));
         }
 
         System.out.println(sections);
@@ -60,7 +63,8 @@ public class TestMostPopularBase {
     private Response getEntity(String prop) {
         return given()
                 .spec(reqSpecMostPopular)
+                .header("api-key", config.getProperty("api-key"))
                 .when()
-                .get(config.getProperty(prop));
+                .get(prop);
     }
 }
