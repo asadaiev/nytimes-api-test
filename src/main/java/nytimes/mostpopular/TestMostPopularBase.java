@@ -29,6 +29,7 @@ public class TestMostPopularBase {
     protected final RequestSpecification reqSpecMostPopular =
             new RequestSpecBuilder().setBaseUri(config.getProperty("mostpopular_url"))
                     .setContentType(ContentType.JSON)
+                    .addHeader("api-key", config.getProperty("api-key"))
                     .build().log().all(true);
 
 

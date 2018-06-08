@@ -18,9 +18,9 @@ public class TestMostEmailed extends TestMostPopularBase {
                 .when()
                 .get(config.getProperty("mostemailed"))
                 .then()
+                .log().all(true)
                 .statusCode(200)
                 .body("status", response -> equalTo("OK"))
                 .body("num_results", response -> notNullValue());
     }
-
 }
