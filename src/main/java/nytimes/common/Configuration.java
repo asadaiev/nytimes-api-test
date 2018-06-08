@@ -34,7 +34,7 @@ public class Configuration {
    *
    * @param key - the key to access the property
    * @return the value of the property
-   */
+   */aq
   public String getProperty(String key) {
     return System.getProperty(key, props.getProperty(key));
   }

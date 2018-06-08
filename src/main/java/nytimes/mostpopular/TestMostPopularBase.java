@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import nytimes.common.Configuration;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashSet;
@@ -20,16 +21,25 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 /**
  * Created by Akhmad on 08.06.2018.
  */
-public abstract class TestMostPopularBase {
+public class TestMostPopularBase {
 
-    Configuration config = new Configuration("/config.properties");
+    public Configuration config;
 
     protected final RequestSpecification reqSpecMostPopular =
             new RequestSpecBuilder().setBaseUri(config.getProperty("mostpopular_url"))
                     .setContentType(ContentType.JSON)
                     .build().log().all(true);
 
+
+    @BeforeClass
+    public void beforeClass(){
+        config = new Configuration("/config.properties");
+    }
     @Test
+    public void getAlltest(){
+        System.out.println(getAllSections());
+    }
+
     protected Set getAllSections() {
 
         ValidatableResponse section_response = getEntity(config.getProperty("all_section_url"))
