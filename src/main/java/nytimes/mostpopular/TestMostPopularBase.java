@@ -6,8 +6,6 @@ import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import nytimes.common.Configuration;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -21,7 +19,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 public class TestMostPopularBase {
 
-    protected Configuration config = new Configuration("/config.properties");;
+    protected Configuration config = new Configuration("/config.properties");
+    ;
 
     protected final RequestSpecification reqSpecMostPopular = new RequestSpecBuilder().setBaseUri(config.getProperty("mostpopular_url"))
             .setContentType(ContentType.JSON)
@@ -53,7 +52,7 @@ public class TestMostPopularBase {
                 .get(prop);
     }
 
-    protected String getPath(ValidatableResponse validatableResponse, String path){
+    protected String getPath(ValidatableResponse validatableResponse, String path) {
         return validatableResponse.extract().response().path(path);
     }
 }

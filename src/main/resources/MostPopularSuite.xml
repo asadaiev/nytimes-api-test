@@ -3,7 +3,7 @@
 <suite name="Suite_MostPopularApi">
     <test name="nytimes-api-test">
         <classes>
-            <class name="nytimes.mostpopular.TestMostEmailed"/>
+            <class name="nytimes.mostpopular.mostemailed.TestMostEmailed"/>
         </classes>
     </test>
 </suite>
