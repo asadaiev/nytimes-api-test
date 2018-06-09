@@ -28,11 +28,6 @@ public class TestMostPopularBase {
             .addHeader("api-key", config.getProperty("api-key"))
             .build().log().all(true);
 
-    @Test
-    public void getAlltest() {
-        System.out.println(getAllSections());
-    }
-
     protected Set getAllSections() {
 
         ValidatableResponse section_response = getEntity(config.getProperty("all_section_url"))

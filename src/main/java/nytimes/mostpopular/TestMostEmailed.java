@@ -2,9 +2,14 @@ package nytimes.mostpopular;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -32,9 +37,8 @@ public class TestMostEmailed extends TestMostPopularBase {
 
 
     }
-//    //
-//    @Test
-    public void calculateEachSectionInGetAllRequest() {
+
+    private void calculateEachSectionInGetAllRequest() {
         out = new LinkedHashMap<>(numberOfMostEmailed);
         for (int j = 0; j < numberOfMostEmailed; j += 20) {
             ValidatableResponse getAllRequest = getEntity(config.getProperty("mostemailed") + "?offset=" + j)
@@ -65,16 +69,27 @@ public class TestMostEmailed extends TestMostPopularBase {
     }
 
 
-    //Also we could you here DataProvider
-    @Test
-    public void testCompareSections(String section){
-
+    @DataProvider(name = "sections")
+    public Object[][] sectionCollection() {
         calculateEachSectionInGetAllRequest();
-        getEntity("/mostemailed/" + section + "/30.json")
-                .then()
-                .log().all(true)
-                .statusCode(200)
-                .body("status", response -> equalTo("OK"))
-                .body("num_results", response -> equalTo(out.get(section)));
+        Object[][] data = out.keySet().stream()
+                .map(section -> new Object[]{section})
+                .toArray(Object[][]::new);
+
+        return data;
+    }
+
+    //Also we could you here DataProvider
+    @Test(dataProvider = "sections")
+    public void testCompareSections(String str) throws UnsupportedEncodingException {
+
+            System.out.println(str);
+            getEntity("/mostemailed/" + URLEncoder.encode(str, "UTF-8") + "/30.json")
+                    .then()
+                    .log().all(true)
+                    .statusCode(200)
+                    .body("status", response -> equalTo("OK"))
+                    .body("num_results", response -> equalTo(out.get(str)));
+
     }
 }
