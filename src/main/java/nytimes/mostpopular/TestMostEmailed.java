@@ -32,8 +32,6 @@ public class TestMostEmailed extends TestMostPopularBase {
 
 
     }
-
-
 //    //
 //    @Test
     public void calculateEachSectionInGetAllRequest() {
@@ -66,14 +64,17 @@ public class TestMostEmailed extends TestMostPopularBase {
         }
     }
 
+
+    //Also we could you here DataProvider
     @Test
-    public void testCompareSections(){
+    public void testCompareSections(String section){
+
         calculateEachSectionInGetAllRequest();
-        getEntity("/mostemailed/World/30.json")
+        getEntity("/mostemailed/" + section + "/30.json")
                 .then()
                 .log().all(true)
                 .statusCode(200)
                 .body("status", response -> equalTo("OK"))
-                .body("num_results", response -> equalTo(out.get("World")));
+                .body("num_results", response -> equalTo(out.get(section)));
     }
 }
