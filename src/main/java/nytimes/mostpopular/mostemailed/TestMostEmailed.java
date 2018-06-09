@@ -3,8 +3,10 @@ package nytimes.mostpopular.mostemailed;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
+import nytimes.ReportCreation;
 import nytimes.mostpopular.TestMostPopularBase;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +21,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 /**
  * Created by Akhmad on 08.06.2018.
  */
+
+@Listeners(ReportCreation.class)
 public class TestMostEmailed extends TestMostPopularBase {
 
     Map<String, Integer> out;
@@ -46,6 +50,10 @@ public class TestMostEmailed extends TestMostPopularBase {
                 .statusCode(200)
                 .body("status", response -> equalTo("OK"))
                 .body("num_results", response -> notNullValue());
+
+
+        //Here we can also map response directly, smth like response.body.as(MyClass)
+        //But as we don't need create payload here for some POST and PUT requests, i used simple JsonPath.
 
         JsonPath jsonPath = new JsonPath(respAll.extract().response().body().asString());
         numberOfMostEmailed = jsonPath.getInt("num_results");

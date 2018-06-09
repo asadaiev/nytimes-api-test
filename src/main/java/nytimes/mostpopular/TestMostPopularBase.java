@@ -20,7 +20,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class TestMostPopularBase {
 
     protected Configuration config = new Configuration("/config.properties");
-    ;
 
     protected final RequestSpecification reqSpecMostPopular = new RequestSpecBuilder().setBaseUri(config.getProperty("mostpopular_url"))
             .setContentType(ContentType.JSON)
@@ -35,7 +34,6 @@ public class TestMostPopularBase {
                 .body("status", response -> equalTo("OK"))
                 .body("num_results", response -> notNullValue());
 
-//        System.out.println("HERE RESPONSE ===========>>>>>>>>" + section_response.extract().response().path("results[0].name"));
         Set<String> sections = new LinkedHashSet();
         for (int i = 0; i < (Integer) section_response.extract().response().path("num_results"); i++) {
             sections.add(section_response.extract().response().path("results[" + i + "].name"));
